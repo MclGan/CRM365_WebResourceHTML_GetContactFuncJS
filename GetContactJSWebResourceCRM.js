@@ -1,27 +1,27 @@
 ﻿function GetContacts() {
-    debugger;
 
-    window.parent.Xrm.WebApi.online.retrieveMultipleRecords("contact", "?$select=_accountid_value,fullname").then(
-        function success(results) {
-            //debugger;
-            for (var i = 0; i < results.entities.length; i++) {
-                var _accountid_value = results.entities[i]["_accountid_value"];
-                var _accountid_value_formatted = results.entities[i]["_accountid_value@OData.Community.Display.V1.FormattedValue"];
-                var _accountid_value_lookuplogicalname = results.entities[i]["_accountid_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-                var fullname = results.entities[i]["fullname"];
+        window.parent.Xrm.WebApi.online.retrieveMultipleRecords("contact", "?$select=address3_country,fullname,_parentcustomerid_value").then(
+            function success(results) {
+                for (var i = 0; i < results.entities.length; i++) {
+                    var address3_country = results.entities[i]["address3_country"];
+                    var fullname = results.entities[i]["fullname"];
+                    var _parentcustomerid_value_formatted = results.entities[i]["_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"];
 
-                var table = document.getElementById("IrakTable");
-                var row = table.insertRow();
-                var cell = row.insertCell();
-                cell.innerHTML = _accountid_value + " " + _accountid_value_formatted + " " + _accountid_value_lookuplogicalname;
-                cell = row.insertCell();
-                cell.innerHTML = fullname;
+                    var table = document.getElementById("LinkedContactsTable");
+                    var row = table.insertRow();
+                    var cell = row.insertCell();
+                    cell.innerHTML = fullname;
+                    cell = row.insertCell();
+                    cell.innerHTML = _parentcustomerid_value_formatted;
+                    cell = row.insertCell();
+                    cell.innerHTML = address3_country;
+                }
+            },
+            function (error) {
+                Xrm.Utility.alertDialog(error.message);
             }
+        );
 
-        },
-        function (error) {
-            Xrm.Utility.alertDialog(error.message);
-        }
-    );
+        
 
 }
